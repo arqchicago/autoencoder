@@ -19,12 +19,6 @@ print(f'test set:  {x_test.shape}')
 
 # creating the autoencoder model
 # input compressed to 64 dim (compression factor of 12.25)
-
-#input_image = Input(shape=(784,))
-#encoder = Dense(64, activation='relu')(input_image)
-#decoder = Dense(784, activation='relu')(encoder)
-#autoencoder = Model(input_image, decoder)
-
 autoencoder = keras.Sequential()
 autoencoder.add(InputLayer(input_shape=(784,), name='input'))
 autoencoder.add(Dense(64, activation='relu', name='encoder'))   #relu sigmoid
