@@ -23,13 +23,25 @@ print(f'test set:  {x_test.shape}')
 
 # creating the autoencoder model
 # input compressed to 64 dim (compression factor of 12.25)
+n_epochs = 20
 autoencoder = Sequential()
 autoencoder.add(InputLayer(input_shape=(784,), name='input'))
 autoencoder.add(Dense(64, activation='relu', name='encoder'))   #relu sigmoid
 autoencoder.add(Dense(784, activation='sigmoid', name='decoder'))
 
-autoencoder.compile(optimizer='adam', loss='mean_squared_error')
-autoencoder.fit(x=x_train, y=x_train, epochs=10, validation_data=(x_val, x_val))
+autoencoder.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
+history = autoencoder.fit(x=x_train, y=x_train, epochs=n_epochs, validation_data=(x_val, x_val))
+
+# summarize history for accuracy
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.xticks(np.arange(0, n_epochs, 1))
+plt.legend(['train', 'test'], loc='upper left')
+plt.savefig('acuracy_epochs.png')
+plt.close()
 
 # decode images in the test set 
 decoded_images = autoencoder.predict(x_test)
@@ -48,4 +60,5 @@ for i in range(10):
     plt.gray()
     plt.axis('off')
 plt.tight_layout()
-plt.show()
+plt.savefig('orig_vs_pred.png')
+plt.close()
